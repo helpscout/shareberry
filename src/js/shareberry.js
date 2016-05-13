@@ -119,13 +119,14 @@
     this.shares.forEach(function(el) {
 
       var className = this.options.className + '-share__item';
+      var iconClassName = this.options.className + '-icon';
       var share = document.createElement('div');
       var template = '';
 
       share.classList.add(this.options.className + '-share');
 
       if (this.options.twitter) {
-        template += '<div class="' + className + ' ' + className + '--twitter" data-shareberry-twitter="' + this.options.twitter + '"></div>';
+        template += '<div class="' + className + ' ' + className + '--twitter" data-shareberry-twitter="' + this.options.twitter + '"><i class="' + iconClassName + ' ' + iconClassName + '--twitter"></i></div>';
       }
 
       share.innerHTML = template;

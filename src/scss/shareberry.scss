@@ -1,3 +1,60 @@
 // Shareberry
 
+// Vendors
 @import "bourbon";
+
+// Dependencies
+@import "icons";
+
+// Variables
+$HSSB-background-color:                       #47525d !default;
+$HSSB-border-radius:                          4px !default;
+$HSSB-share-ease:                             cubic-bezier(0.250, 0.100, 0.145, 1.285) !default;
+$HSSB-share-item-padding:                     8px !default;
+
+
+// Components
+.hs-shareberry {
+  box-sizing: border-box;
+  position: relative;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+
+.hs-shareberry-share {
+  @include transition(all 0.2s $HSSB-share-ease);
+  @include transform(translate3d(0, 25%, 0) scale(0.9));
+  @include user-select(none);
+  background-color: $HSSB-background-color;
+  border: 1px solid;
+  border-color: darken($HSSB-background-color, 4);
+  border-radius: $HSSB-border-radius;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+
+.hs-shareberry-share__item {
+  cursor: pointer;
+  opacity: 0.8;
+  padding: $HSSB-share-item-padding;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
+// States
+.hs-shareberry:hover {
+  .hs-shareberry-share {
+    @include transform(translate3d(0, 0, 0) scale(1));
+    opacity: 1;
+  }
+}
