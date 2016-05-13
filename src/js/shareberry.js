@@ -1,32 +1,12 @@
 (function() { 'use strict';
 
   /**
-   * Shareberry
-   * description: Class constructor
-   * return: class
-   */
-  var Shareberry = function(options) {
-    // Default attributes
-    this.options = {
-      className: 'hs-shareberry',
-      el: false,
-      twitter: false
-    };
-
-    this.els = [];
-    this.shares = [];
-
-    return this.initialize(options);
-  };
-
-
-  /**
    * _extend
    * description: Vanilla JS solution to jQuery's extend
    * source: http://youmightnotneedjquery.com/#extend
    * return: object
    */
-  Shareberry.prototype._extend = function(output) {
+  var _extend = function(output) {
     output = output || {};
 
     for (var i = 1; i < arguments.length; i++) {
@@ -43,14 +23,218 @@
 
 
   /**
+   * ShareberryItem
+   * description: Class constructor for an individual share item
+   * return: class
+   */
+  var ShareberryItem = function(options) {
+    this._extend = _extend;
+
+    // Default attributes
+    this.options = {
+      className: null,
+      el: false,
+      collection: false,
+      popup: {
+        width: 640,
+        height: 300
+      }
+    };
+
+    this.el = false;
+    this.share = false;
+
+    return this.initialize(options);
+  };
+
+
+  /**
+   * initialize
+   * description: Initialization for a Shareberry item
+   * return: class
+   */
+  ShareberryItem.prototype.initialize = function(options) {
+    if (options && typeof options === 'object') {
+      this.options = this._extend(this.options, options);
+    }
+
+    if (!this.options.el) {
+      return false;
+    }
+
+    if (!this.options.collection) {
+      return false;
+    }
+
+    this.collection = this.options.collection;
+
+    this.render();
+
+    return this;
+  };
+
+
+  /**
+   * actions
+   * description: Setups events for the Shareberry unit
+   * return: class
+   */
+  ShareberryItem.prototype.addEventListeners = function() {
+    if (!this.el) {
+      return false;
+    }
+
+    this.share.addEventListener('click', this.actionShare.bind(this), false);
+
+    return this;
+  };
+
+
+  /**
+   * render
+   * description: Renders the sharing elements into the DOM
+   * return: class
+   */
+  ShareberryItem.prototype.render = function() {
+    if (!this.options.el) {
+      return false;
+    }
+
+    // Creating the share wrapper
+    this.el = document.createElement('div');
+    this.el.classList.add(this.options.className);
+
+    // Creating the share element
+    var className = this.options.className + '-share__item';
+    var iconClassName = this.options.className + '-icon';
+
+    this.share = document.createElement('div');
+    var template = '';
+
+    this.share.classList.add(this.options.className + '-share');
+
+    if (this.collection.options.twitter) {
+      template += '<div class="' + className + ' ' + className + '--twitter" data-shareberry-social="twitter" data-shareberry-handle="' + this.collection.options.twitter + '"><i class="' + iconClassName + ' ' + iconClassName + '--twitter"></i></div>';
+    }
+
+    this.share.innerHTML = template;
+
+    // Inject into the DOM
+    this.options.el.parentNode.insertBefore(this.el, this.options.el);
+    this.el.appendChild(this.options.el);
+    this.el.insertBefore(this.share, this.el.firstChild);
+
+    this.addEventListeners();
+
+    return this;
+  };
+
+
+  /**
+   * getClickTarget
+   * description: Determines if the click action was on the share icon
+   * return: DOM element
+   */
+  ShareberryItem.prototype.getClickTarget = function(event) {
+    var target = event.target;
+
+    if (target.classList.contains(this.options.className + '-share')) {
+      return false;
+    }
+
+    // Reassign target if the icon is clicked
+    if (target.classList.contains(this.options.className + '-icon')) {
+      target = target.parentNode;
+    }
+
+    return target;
+  };
+
+
+  /**
+   * actionShare
+   * description: The share action that happens after a click event
+   * return: class
+   */
+  ShareberryItem.prototype.actionShare = function(event) {
+    var target = this.getClickTarget(event);
+
+    if (!target) {
+      return false;
+    }
+
+    var social = target.getAttribute('data-shareberry-social');
+    var handle = target.getAttribute('data-shareberry-handle');
+
+    this.renderPopup(social, handle);
+  };
+
+
+  /**
+   * renderPopup
+   * description: Launches the popup window
+   * return: class
+   */
+  ShareberryItem.prototype.renderPopup = function(social, handle) {
+    if (
+        !social ||
+        !handle ||
+        typeof social !== 'string' ||
+        typeof handle !== 'string') {
+      return false;
+    }
+
+    // Calibrate the size / position of popup window
+    var width = this.options.popup.width;
+    var height = this.options.popup.height;
+    var left = (screen.width / 2) - (width / 2);
+    var top = (screen.height / 2) - (height);
+    var params = '';
+
+    params += 'width=' + width + ',';
+    params += 'height=' + height + ',';
+    params += 'left=' + left + ',';
+    params += 'top=' + top;
+
+    // DEBUG:
+    var url = 'https://twitter.com/intent/tweet?text=Is%20Your%20Business%20Ready%20for%20Facebook%20Live%3F&url=http%3A%2F%2Fwistia.com%2Fblog%2Ffacebook-live-for-business&via=wistia';
+
+    window.open(url, '', params);
+
+    return this;
+  };
+
+
+  /**
+   * Shareberry
+   * description: Class constructor
+   * return: class
+   */
+  var Shareberry = function(options) {
+    this._extend = _extend;
+
+    // Default attributes
+    this.options = {
+      className: 'hs-shareberry',
+      el: false,
+      twitter: false
+    };
+
+    this.ShareberryItem = ShareberryItem;
+
+    this.els = [];
+    this.shares = [];
+
+    return this.initialize(options);
+  };
+
+
+  /**
    * initialize
    * description: Initializes the Class
    * return: class
    */
   Shareberry.prototype.initialize = function(options) {
-    // Debug
-    console.log('Shareberry initialized');
-
     if (options && typeof options === 'object') {
       this.options = this._extend(this.options, options);
     }
@@ -60,12 +244,20 @@
       return false;
     }
 
-    // Setting the elements
-    this.els = Array.prototype.slice.call(document.querySelectorAll(this.options.el));
+    var els = document.querySelectorAll(this.options.el);
+    if (!els || !els.length) {
+      return false;
+    }
 
-    this.render();
+    for (var i = 0, len = els.length; i < len; i++) {
+      var share = new this.ShareberryItem({
+        className: this.options.className,
+        el: els[i],
+        collection: this
+      });
+      this.shares.push(share);
+    }
 
-    console.log(this);
     return this;
   };
 
@@ -102,37 +294,6 @@
     }, this);
 
     this.renderShares();
-
-    return this;
-  };
-
-  /**
-   * renderShares
-   * description: Renders the sharing elements into the DOM
-   * return: class
-   */
-  Shareberry.prototype.renderShares = function() {
-    if (!this.shares) {
-      return false;
-    }
-
-    this.shares.forEach(function(el) {
-
-      var className = this.options.className + '-share__item';
-      var iconClassName = this.options.className + '-icon';
-      var share = document.createElement('div');
-      var template = '';
-
-      share.classList.add(this.options.className + '-share');
-
-      if (this.options.twitter) {
-        template += '<div class="' + className + ' ' + className + '--twitter" data-shareberry-twitter="' + this.options.twitter + '"><i class="' + iconClassName + ' ' + iconClassName + '--twitter"></i></div>';
-      }
-
-      share.innerHTML = template;
-
-      el.insertBefore(share, el.firstChild);
-    }, this);
 
     return this;
   };
