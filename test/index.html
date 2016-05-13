@@ -2,8 +2,38 @@
 <html lang="en">
   <head>
     <title>Shareberry</title>
+
+    <style>
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      body {
+        padding: 20px 40px;
+      }
+    </style>
   </head>
   <body>
+
+    <p>In addition to my hero John McPhee’s rightful <a href="http://www.newyorker.com/magazine/2013/01/14/structure">love of structure</a>, comparison has convinced me that great communication rests on three other important traits:</p>
+
+    <p><img src="/images/001.png" alt="good writing is"> </p>
+
+    <p>I’d describe this as the creative <a href="https://en.wikipedia.org/wiki/Metagaming">metagame</a>, or understanding “the game outside the game.” Whatever you make will be deemed original or cliché <em>in comparison</em> to what currently exists; creation may be about the lonely hours, but a final product is never judged in isolation. It lives in a dynamic, ever-changing ecosystem.</p>
+
+    <p><img src="/images/002.png" alt="good writing is"> </p>
+
+    <p>I’d describe this as the creative <a href="https://en.wikipedia.org/wiki/Metagaming">metagame</a>, or understanding “the game outside the game.” Whatever you make will be deemed original or cliché <em>in comparison</em> to what currently exists; creation may be about the lonely hours, but a final product is never judged in isolation. It lives in a dynamic, ever-changing ecosystem.</p>
+
     <script src="/js/shareberry.js"></script>
+    <script>
+      var options = {
+        el: 'img',
+        twitter: 'helpscout'
+      };
+
+      new Shareberry(options);
+    </script>
   </body>
 </html>

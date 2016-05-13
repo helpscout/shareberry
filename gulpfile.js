@@ -25,7 +25,7 @@ gulp.task('browser-reload', function() {
 // Copier
 gulp.task('copy-test', function(callback) {
   return gulp.src([
-      'test/*.html'
+      'test/**/*',
     ])
     .pipe(gulp.dest('_site'))
     .on('close', callback);
