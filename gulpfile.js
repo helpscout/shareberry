@@ -35,7 +35,7 @@ gulp.task('copy-test', function(callback) {
 
 // Linter
 gulp.task('lint', function(callback) {
-  return gulp.src(['src/**/*.js'])
+  return gulp.src(['src/js/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(gulp.dest('_site/js'))
@@ -54,7 +54,7 @@ gulp.task('validate', function(callback) {
 // Watcher
 gulp.task('watch', function(callback) {
   gulp.watch([
-    'src/**/*.js'
+    'src/js/**/*.js'
   ], ['validate']);
 
   gulp.watch([
