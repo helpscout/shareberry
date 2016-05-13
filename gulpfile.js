@@ -1,9 +1,11 @@
-var gulp         = require('gulp');
+var gulp        = require('gulp');
 var browserSync = require('browser-sync');
-var jshint       = require('gulp-jshint');
-var runSequence  = require('run-sequence');
-var uglify       = require('gulp-uglify');
-
+var cssmin      = require('gulp-cssmin');
+var jshint      = require('gulp-jshint');
+var plumber     = require('gulp-plumber');
+var runSequence = require('run-sequence');
+var sass        = require('gulp-sass');
+var uglify      = require('gulp-uglify');
 
 // Browser sync
 gulp.task('browser-sync', function() {
@@ -18,6 +20,26 @@ gulp.task('browser-sync', function() {
 
 gulp.task('browser-reload', function() {
   browserSync.reload();
+});
+
+
+
+// CSS
+gulp.task('sass', function(callback) {
+  return gulp.src('src/scss/**/*.scss')
+    .pipe(plumber())
+    .pipe(
+      sass({
+        includePaths: [
+          'src/scss',
+          'node_modules/bourbon/app/assets/stylesheets'
+        ]
+      })
+      .on('error', sass.logError)
+    )
+    .pipe(gulp.dest('_site/css'))
+    .pipe(browserSync.reload({ stream: true }))
+    .on('close', callback);
 });
 
 
@@ -54,6 +76,10 @@ gulp.task('validate', function(callback) {
 // Watcher
 gulp.task('watch', function(callback) {
   gulp.watch([
+    'src/scss/**/*.scss'
+  ], ['sass']);
+
+  gulp.watch([
     'src/js/**/*.js'
   ], ['validate']);
 
@@ -65,7 +91,7 @@ gulp.task('watch', function(callback) {
 
 
 gulp.task('default', function(callback) {
-  runSequence(['lint', 'copy-test'], 'browser-sync', 'watch', callback);
+  runSequence(['sass', 'lint', 'copy-test'], 'browser-sync', 'watch', callback);
 });
 // Alias to default
 gulp.task('serve', ['default']);
