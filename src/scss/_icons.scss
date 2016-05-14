@@ -3,14 +3,19 @@
 // Dependencies
 @import "images";
 
+
+// Variables
+$HSSB-icon-size:                                          18px !default;
+
+
 // Base
 .hs-shareberry-icon {
   background-repeat: no-repeat;
   background-size: cover;
   display: inline-block;
-  height: 20px;
+  height: $HSSB-icon-size;
   vertical-align: middle;
-  width: 20px;
+  width: $HSSB-icon-size;
 }
 
 // Icons

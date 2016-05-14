@@ -42,6 +42,7 @@
     };
 
     this.el = false;
+    this.type = 'text';
     this.share = false;
 
     return this.initialize(options);
@@ -64,6 +65,10 @@
 
     if (!this.options.collection) {
       return false;
+    }
+
+    if (this.options.el.tagName.toLowerCase() === 'img') {
+      this.type = 'image';
     }
 
     this.collection = this.options.collection;
@@ -119,9 +124,13 @@
 
     this.share.innerHTML = template;
 
+    this.content = document.createElement('div');
+    this.content.classList.add(this.options.className + '-content');
+
     // Inject into the DOM
     this.options.el.parentNode.insertBefore(this.el, this.options.el);
-    this.el.appendChild(this.options.el);
+    this.el.appendChild(this.content);
+    this.content.appendChild(this.options.el);
     this.el.insertBefore(this.share, this.el.firstChild);
 
     this.addEventListeners();
@@ -148,6 +157,77 @@
     }
 
     return target;
+  };
+
+
+  /**
+   * getText
+   * description: Get the text for sharing
+   * return: string
+   */
+  ShareberryItem.prototype.getText = function() {
+    var text = this.collection.options.text;
+
+    if (this.type === 'text') {
+      text = this.options.el.innerText;
+    }
+
+    // Trim text
+    if (text.length > this.collection.options.textLimit) {
+      text = text.substring(0, this.collection.options.textLimit) + '…';
+    }
+
+    text = text ? text : window.document.title;
+    text = encodeURIComponent(text);
+
+    return text;
+  };
+
+
+  /**
+   * getUrl
+   * description: Get the url for sharing
+   * return: string
+   */
+  ShareberryItem.prototype.getUrl = function() {
+    var url = this.collection.options.url;
+    url = url ? url : window.location.href;
+    url = encodeURIComponent(url);
+
+    return url;
+  };
+
+
+  /**
+   * getParams
+   * description: Get params for sharing
+   * return: object
+   */
+  ShareberryItem.prototype.getParams = function(handle) {
+    // Params
+    var text = this.getText();
+    var url = this.getUrl();
+    handle = handle ? handle : false;
+
+    // Calibrate the size / position of popup window
+    var width = this.options.popup.width;
+    var height = this.options.popup.height;
+    var left = (screen.width / 2) - (width / 2);
+    var top = (screen.height / 2) - (height);
+
+    var params = {
+      text: text,
+      url: url,
+      handle: handle,
+      window: {
+        width: width,
+        height: height,
+        left: left,
+        top: top
+      }
+    };
+
+    return params;
   };
 
 
@@ -184,22 +264,18 @@
       return false;
     }
 
-    // Calibrate the size / position of popup window
-    var width = this.options.popup.width;
-    var height = this.options.popup.height;
-    var left = (screen.width / 2) - (width / 2);
-    var top = (screen.height / 2) - (height);
-    var params = '';
+    var params = this.getParams(handle);
+    var attributes = '';
 
-    params += 'width=' + width + ',';
-    params += 'height=' + height + ',';
-    params += 'left=' + left + ',';
-    params += 'top=' + top;
+    attributes += 'width=' + params.window.width + ',';
+    attributes += 'height=' + params.window.height + ',';
+    attributes += 'left=' + params.window.left + ',';
+    attributes += 'top=' + params.window.top;
 
-    // DEBUG:
-    var url = 'https://twitter.com/intent/tweet?text=Is%20Your%20Business%20Ready%20for%20Facebook%20Live%3F&url=http%3A%2F%2Fwistia.com%2Fblog%2Ffacebook-live-for-business&via=wistia';
+    var url = 'https://twitter.com/intent/tweet?text=' + params.text + '&url=' + params.url + '&via=' + params.handle;
 
-    window.open(url, '', params);
+    // Open popup window
+    window.open(url, '', attributes);
 
     return this;
   };
@@ -217,6 +293,7 @@
     this.options = {
       className: 'hs-shareberry',
       el: false,
+      textLimit: 95,
       twitter: false
     };
 
@@ -261,42 +338,6 @@
     return this;
   };
 
-
-  /**
-   * getTemplate
-   * description: Creates the Shareberry DOM element
-   * return: DOM element
-   */
-  Shareberry.prototype.getTemplate = function() {
-    var el = document.createElement('div');
-    el.classList.add(this.options.className);
-    return el;
-  };
-
-  /**
-   * render
-   * description: Renders the Shareberry wrappers in the DOM
-   * return: class
-   */
-  Shareberry.prototype.render = function() {
-    if (!this.els) {
-      return false;
-    }
-
-    this.els.forEach(function(el) {
-      var parent = el.parentNode;
-      var template = this.getTemplate();
-
-      el.parentNode.insertBefore(template, el);
-      template.appendChild(el);
-
-      this.shares.push(template);
-    }, this);
-
-    this.renderShares();
-
-    return this;
-  };
 
   // Exporting Shareberry to global
   window.Shareberry = Shareberry;
