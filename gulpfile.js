@@ -1,8 +1,10 @@
 var gulp        = require('gulp');
 var browserSync = require('browser-sync');
 var cssmin      = require('gulp-cssmin');
+var del         = require('del');
 var jshint      = require('gulp-jshint');
 var plumber     = require('gulp-plumber');
+var rename      = require('gulp-rename');
 var runSequence = require('run-sequence');
 var sass        = require('gulp-sass');
 var uglify      = require('gulp-uglify');
@@ -24,6 +26,17 @@ gulp.task('browser-reload', function() {
 
 
 
+// Clean
+gulp.task('clean-build', function() {
+  del(['dist']);
+});
+
+gulp.task('clean-development', function() {
+  del(['_site']);
+});
+
+
+
 // CSS
 gulp.task('sass', function(callback) {
   return gulp.src('src/scss/**/*.scss')
@@ -39,6 +52,32 @@ gulp.task('sass', function(callback) {
     )
     .pipe(gulp.dest('_site/css'))
     .pipe(browserSync.reload({ stream: true }))
+    .on('close', callback);
+});
+
+gulp.task('sass-build', function(callback) {
+  return gulp.src('src/scss/**/*.scss')
+    .pipe(plumber())
+    .pipe(
+      sass({
+        includePaths: [
+          'src/scss',
+          'node_modules/bourbon/app/assets/stylesheets'
+        ]
+      })
+      .on('error', sass.logError)
+    )
+    .pipe(gulp.dest('dist/css'))
+    .on('close', callback);
+});
+
+gulp.task('css-min', function(callback) {
+  return gulp.src('dist/css/**/*.css')
+    .pipe(cssmin())
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('dist/css'))
     .on('close', callback);
 });
 
@@ -64,6 +103,23 @@ gulp.task('lint', function(callback) {
     .on('close', callback);
 });
 
+gulp.task('js-build', function(callback) {
+  return gulp.src(['src/js/**/*.js'])
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'))
+    .pipe(gulp.dest('dist/js'))
+    .on('close', callback);
+});
+
+gulp.task('js-min', function(callback) {
+  return gulp.src(['dist/js/**/*.js'])
+    .pipe(uglify())
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('dist/js'))
+    .on('close', callback);
+});
 
 
 // Validater
@@ -90,8 +146,17 @@ gulp.task('watch', function(callback) {
 
 
 
-gulp.task('default', function(callback) {
-  runSequence(['sass', 'lint', 'copy-test'], 'browser-sync', 'watch', callback);
+// Build
+gulp.task('build', function(callback) {
+  runSequence('clean-build', 'sass-build', 'css-min', 'js-build', 'js-min', callback);
 });
+
+
+
+// Development
+gulp.task('default', function(callback) {
+  runSequence('clean-development', ['sass', 'lint', 'copy-test'], 'browser-sync', 'watch', callback);
+});
+
 // Alias to default
 gulp.task('serve', ['default']);
