@@ -1,0 +1,17 @@
+{
+  "name": "shareberry",
+  "description": "A plugin for social sharing.",
+  "main": "gulpfile.js",
+  "authors": [
+    "ItsJonQ <itsjonq@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/helpscout/shareberry",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

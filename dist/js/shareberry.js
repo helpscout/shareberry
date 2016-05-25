@@ -127,6 +127,13 @@
     this.content = document.createElement('div');
     this.content.classList.add(this.options.className + '-content');
 
+    // Add tag specific class for CSS targeting
+    var elTag = this.options.el.tagName;
+    if (elTag) {
+      elTag = elTag.toLowerCase();
+      this.content.classList.add(this.options.className + '-content--' + elTag);
+    }
+
     // Inject into the DOM
     this.options.el.parentNode.insertBefore(this.el, this.options.el);
     this.el.appendChild(this.content);
@@ -165,16 +172,19 @@
    * description: Get the text for sharing
    * return: string
    */
-  ShareberryItem.prototype.getText = function() {
+  ShareberryItem.prototype.getText = function(handle) {
     var text = this.collection.options.text;
 
     if (this.type === 'text') {
       text = this.options.el.innerText;
     }
 
-    // Trim text
-    if (text.length > this.collection.options.textLimit) {
-      text = text.substring(0, this.collection.options.textLimit) + '…';
+
+    // Verify text length
+    // 115 is the approx threshold of text + handle with a shortened URL for Twitter's 160 max character limit
+    if ((text.length + handle.length) > 109) {
+      text = text.substring(0, (109 - handle.length));
+      text += '…';
     }
 
     text = text ? text : window.document.title;
@@ -205,9 +215,11 @@
    */
   ShareberryItem.prototype.getParams = function(handle) {
     // Params
-    var text = this.getText();
-    var url = this.getUrl();
     handle = handle ? handle : false;
+    var text = this.getText(handle);
+    var url = this.getUrl();
+
+    url = 'https://pinkflamingo.helpscout.net/blog/product-managers/blog/product-managers/blog/product-managers/blog/product-managers/blog/product-managers/';
 
     // Calibrate the size / position of popup window
     var width = this.options.popup.width;
@@ -272,7 +284,7 @@
     attributes += 'left=' + params.window.left + ',';
     attributes += 'top=' + params.window.top;
 
-    var url = 'https://twitter.com/intent/tweet?text=' + params.text + '&url=' + params.url + '&via=' + params.handle;
+    var url = 'https://twitter.com/intent/tweet?url=' + params.url + '&text=' + params.text + '&via=' + params.handle;
 
     // Open popup window
     window.open(url, '', attributes);
@@ -293,7 +305,6 @@
     this.options = {
       className: 'hs-shareberry',
       el: false,
-      textLimit: 95,
       twitter: false
     };
 
