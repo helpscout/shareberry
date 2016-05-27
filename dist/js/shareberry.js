@@ -1,5 +1,7 @@
 (function() { 'use strict';
 
+  var VERSION = '0.0.3';
+
   /**
    * _extend
    * description: Vanilla JS solution to jQuery's extend
@@ -300,6 +302,8 @@
    */
   var Shareberry = function(options) {
     this._extend = _extend;
+
+    this.version = VERSION;
 
     // Default attributes
     this.options = {
