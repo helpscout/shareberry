@@ -9,7 +9,8 @@
 // Variables
 $HSSB-background-color:                       #47525d !default;
 $HSSB-border-radius:                          4px !default;
-$HSSB-share-ease:                             cubic-bezier(0.250, 0.100, 0.145, 1.285) !default;
+// $HSSB-share-ease:                             cubic-bezier(0.250, 0.100, 0.145, 1.285) !default;
+$HSSB-share-ease:                             ease !default;
 $HSSB-share-item-padding:                     5px !default;
 
 

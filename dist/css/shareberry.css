@@ -21,9 +21,9 @@
 .hs-shareberry-share {
   -webkit-filter: blur(0);
   filter: blur(0);
-  -webkit-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.145, 1.285);
-  -moz-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.145, 1.285);
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.145, 1.285);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
   -webkit-transform: translate3d(0, 25%, 0) scale(0.9);
   -moz-transform: translate3d(0, 25%, 0) scale(0.9);
   -ms-transform: translate3d(0, 25%, 0) scale(0.9);
