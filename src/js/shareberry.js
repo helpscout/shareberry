@@ -221,8 +221,6 @@
     var text = this.getText(handle);
     var url = this.getUrl();
 
-    url = 'https://pinkflamingo.helpscout.net/blog/product-managers/blog/product-managers/blog/product-managers/blog/product-managers/blog/product-managers/';
-
     // Calibrate the size / position of popup window
     var width = this.options.popup.width;
     var height = this.options.popup.height;
