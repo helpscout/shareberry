@@ -17,6 +17,8 @@
   position: relative; }
   .hs-shareberry * {
     box-sizing: border-box; }
+  .hs-shareberry--inline {
+    display: inline-block; }
 
 .hs-shareberry-share {
   -webkit-filter: blur(0);
