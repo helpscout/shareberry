@@ -22,6 +22,10 @@ $HSSB-share-item-padding:                     5px !default;
   * {
     box-sizing: border-box;
   }
+
+  &--inline {
+    display: inline-block;
+  }
 }
 
 

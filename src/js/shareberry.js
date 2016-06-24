@@ -1,6 +1,6 @@
 (function() { 'use strict';
 
-  var VERSION = '0.0.4';
+  var VERSION = '0.0.5';
 
   /**
    * _extend
@@ -37,6 +37,7 @@
       className: null,
       el: false,
       collection: false,
+      inline: false,
       popup: {
         width: 640,
         height: 300
@@ -110,6 +111,10 @@
     // Creating the share wrapper
     this.el = document.createElement('div');
     this.el.classList.add(this.options.className);
+
+    if (this.options.inline) {
+      this.el.classList.add(this.options.className + '--inline');
+    }
 
     // Creating the share element
     var className = this.options.className + '-share__item';
@@ -307,6 +312,7 @@
     this.options = {
       className: 'hs-shareberry',
       el: false,
+      inline: false,
       twitter: false
     };
 
@@ -343,6 +349,7 @@
       var share = new this.ShareberryItem({
         className: this.options.className,
         el: els[i],
+        inline: this.options.inline,
         collection: this
       });
       this.shares.push(share);
