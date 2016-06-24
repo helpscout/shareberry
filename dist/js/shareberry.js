@@ -1,6 +1,6 @@
 (function() { 'use strict';
 
-  var VERSION = '0.0.5';
+  var VERSION = '0.0.6';
 
   /**
    * _extend
@@ -93,6 +93,9 @@
     }
 
     this.share.addEventListener('click', this.actionShare.bind(this), false);
+    if (this.options.inline) {
+      this.content.addEventListener('click', this.actionShare.bind(this), false);
+    }
 
     return this;
   };
@@ -145,7 +148,7 @@
     this.options.el.parentNode.insertBefore(this.el, this.options.el);
     this.el.appendChild(this.content);
     this.content.appendChild(this.options.el);
-    this.el.insertBefore(this.share, this.el.firstChild);
+    this.el.appendChild(this.share);
 
     this.addEventListeners();
 
@@ -161,13 +164,15 @@
   ShareberryItem.prototype.getClickTarget = function(event) {
     var target = event.target;
 
-    if (target.classList.contains(this.options.className + '-share')) {
-      return false;
-    }
+    if (!this.options.inline) {
+      if (target.classList.contains(this.options.className + '-share')) {
+        return false;
+      }
 
-    // Reassign target if the icon is clicked
-    if (target.classList.contains(this.options.className + '-icon')) {
-      target = target.parentNode;
+      // Reassign target if the icon is clicked
+      if (target.classList.contains(this.options.className + '-icon')) {
+        target = target.parentNode;
+      }
     }
 
     return target;
@@ -262,6 +267,11 @@
 
     var social = target.getAttribute('data-shareberry-social');
     var handle = target.getAttribute('data-shareberry-handle');
+
+    if (this.options.inline) {
+      social = 'twitter';
+      handle = this.collection.options.twitter;
+    }
 
     this.renderPopup(social, handle);
   };

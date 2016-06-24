@@ -17,8 +17,6 @@
   position: relative; }
   .hs-shareberry * {
     box-sizing: border-box; }
-  .hs-shareberry--inline {
-    display: inline-block; }
 
 .hs-shareberry-share {
   -webkit-filter: blur(0);
@@ -74,3 +72,31 @@
 
 .hs-shareberry-share:hover + .hs-shareberry-content {
   text-decoration: underline; }
+
+.hs-shareberry--inline {
+  cursor: pointer;
+  display: inline-block; }
+  .hs-shareberry--inline > * {
+    display: inline-block; }
+  .hs-shareberry--inline .hs-shareberry-content {
+    border-bottom: 1px dotted #55acee; }
+    .hs-shareberry--inline .hs-shareberry-content:hover {
+      color: #55acee; }
+  .hs-shareberry--inline .hs-shareberry-share {
+    -webkit-filter: inherit;
+    filter: inherit;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
+    border-radius: 3px;
+    display: inline-block;
+    margin: -3px 5px 0 8px;
+    opacity: 1;
+    position: relative;
+    vertical-align: middle; }
+  .hs-shareberry--inline .hs-shareberry-icon {
+    display: block;
+    height: 12px;
+    width: 12px; }
