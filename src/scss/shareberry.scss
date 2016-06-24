@@ -12,6 +12,7 @@ $HSSB-border-radius:                          4px !default;
 // $HSSB-share-ease:                             cubic-bezier(0.250, 0.100, 0.145, 1.285) !default;
 $HSSB-share-ease:                             ease !default;
 $HSSB-share-item-padding:                     5px !default;
+$twitter-color-primary:                       #55acee !default;
 
 
 // Components
@@ -21,10 +22,6 @@ $HSSB-share-item-padding:                     5px !default;
 
   * {
     box-sizing: border-box;
-  }
-
-  &--inline {
-    display: inline-block;
   }
 }
 
@@ -78,5 +75,41 @@ $HSSB-share-item-padding:                     5px !default;
 .hs-shareberry-share:hover {
   & + .hs-shareberry-content {
     text-decoration: underline;
+  }
+}
+
+
+// Modifiers
+.hs-shareberry--inline {
+  cursor: pointer;
+  display: inline-block;
+
+  > * {
+    display: inline-block;
+  }
+
+  .hs-shareberry-content {
+    border-bottom: 1px dotted $twitter-color-primary;
+
+    &:hover {
+      color: $twitter-color-primary;
+    }
+  }
+
+  .hs-shareberry-share {
+    @include filter(inherit);
+    @include transform(none);
+    border-radius: 3px;
+    display: inline-block;
+    margin: -3px 5px 0 8px;
+    opacity: 1;
+    position: relative;
+    vertical-align: middle;
+  }
+
+  .hs-shareberry-icon {
+    display: block;
+    height: 12px;
+    width: 12px;
   }
 }
