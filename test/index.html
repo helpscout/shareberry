@@ -24,16 +24,23 @@
 
     <p><img src="/images/002.png" alt="good writing is"> </p>
 
-    <p>I’d describe this as the creative <a href="https://en.wikipedia.org/wiki/Metagaming">metagame</a>, or understanding “the game outside the game.” Whatever you make will be deemed original or cliché <em>in comparison</em> to what currently exists; creation may be about the lonely hours, but a final product is never judged in isolation. It lives in a dynamic, ever-changing ecosystem.</p>
+    <p>I’d describe this as the creative <a href="https://en.wikipedia.org/wiki/Metagaming">metagame</a>, or understanding “the game outside the game.” Whatever you make will be deemed original or cliché <em class="awesome" data-shareberry-via="false">in comparison to what currently exists; creation may be about the lonely hours, but a final product is never judged in isolation.</em> It lives in a dynamic, ever-changing ecosystem.</p>
 
     <script src="/js/shareberry.js"></script>
     <script>
       var options = {
         el: 'p',
-        twitter: 'helpscout'
+        twitter: 'helpscout',
+        via: false
       };
 
       new Shareberry(options);
+
+      new Shareberry({
+        el: '.awesome',
+        inline: true,
+        twitter: 'helpscout'
+      });
     </script>
   </body>
 </html>

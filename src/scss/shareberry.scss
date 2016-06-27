@@ -82,10 +82,10 @@ $twitter-color-primary:                       #55acee !default;
 // Modifiers
 .hs-shareberry--inline {
   cursor: pointer;
-  display: inline-block;
+  display: inline;
 
   > * {
-    display: inline-block;
+    display: inline;
   }
 
   .hs-shareberry-content {

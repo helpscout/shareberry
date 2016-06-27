@@ -75,9 +75,9 @@
 
 .hs-shareberry--inline {
   cursor: pointer;
-  display: inline-block; }
+  display: inline; }
   .hs-shareberry--inline > * {
-    display: inline-block; }
+    display: inline; }
   .hs-shareberry--inline .hs-shareberry-content {
     border-bottom: 1px dotted #55acee; }
     .hs-shareberry--inline .hs-shareberry-content:hover {

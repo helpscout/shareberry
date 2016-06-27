@@ -1,6 +1,6 @@
 (function() { 'use strict';
 
-  var VERSION = '0.0.6';
+  var VERSION = '0.0.7';
 
   /**
    * _extend
@@ -75,6 +75,12 @@
     }
 
     this.collection = this.options.collection;
+    this.via = this.options.via;
+
+    if (this.options.el.hasAttribute('data-shareberry-via')) {
+      this.via = this.options.el.getAttribute('data-shareberry-via');
+    }
+    this.via = this.via.toString();
 
     this.render();
 
@@ -186,16 +192,20 @@
    */
   ShareberryItem.prototype.getText = function(handle) {
     var text = this.collection.options.text;
+    var trimLength = 0;
 
     if (this.type === 'text') {
       text = this.options.el.innerText;
     }
 
+    if (this.via !== 'false' && handle) {
+      trimLength = handle.length;
+    }
 
     // Verify text length
     // 115 is the approx threshold of text + handle with a shortened URL for Twitter's 160 max character limit
-    if ((text.length + handle.length) > 109) {
-      text = text.substring(0, (109 - handle.length));
+    if ((text.length + trimLength) > 109) {
+      text = text.substring(0, (109 - trimLength));
       text += '…';
     }
 
@@ -293,13 +303,24 @@
 
     var params = this.getParams(handle);
     var attributes = '';
+    var via = '';
 
     attributes += 'width=' + params.window.width + ',';
     attributes += 'height=' + params.window.height + ',';
     attributes += 'left=' + params.window.left + ',';
     attributes += 'top=' + params.window.top;
 
-    var url = 'https://twitter.com/intent/tweet?url=' + params.url + '&text=' + params.text + '&via=' + params.handle;
+    var url = 'https://twitter.com/intent/tweet?url=' + params.url + '&text=' + params.text;
+
+    if (this.via !== 'false') {
+      if ((this.via === 'true') && params.handle) {
+        via = params.handle;
+      }
+      else {
+        via = this.via;
+      }
+      url = url + '&via=' + via;
+    }
 
     // Open popup window
     window.open(url, '', attributes);
@@ -323,7 +344,8 @@
       className: 'hs-shareberry',
       el: false,
       inline: false,
-      twitter: false
+      twitter: false,
+      via: true
     };
 
     this.ShareberryItem = ShareberryItem;
@@ -360,7 +382,8 @@
         className: this.options.className,
         el: els[i],
         inline: this.options.inline,
-        collection: this
+        collection: this,
+        via: this.options.via
       });
       this.shares.push(share);
     }
