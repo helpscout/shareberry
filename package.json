@@ -2,14 +2,14 @@
   "name": "shareberry",
   "version": "0.0.7",
   "description": "A plugin for social sharing.",
-  "main": "gulpfile.js",
+  "main": "/dist/js/shareberry.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "ItsJonQ",
   "license": "MIT",
   "devDependencies": {
     "bourbon": "^4.2.7",
