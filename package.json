@@ -1,6 +1,6 @@
 {
   "name": "shareberry",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A plugin for social sharing.",
   "main": "/dist/js/shareberry.js",
   "directories": {
